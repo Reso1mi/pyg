@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>商品编辑</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta
+            content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+            name="viewport">
+
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet"
+          href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 富文本编辑器 -->
+    <link rel="stylesheet"
+          href="../plugins/kindeditor/themes/default/default.css"/>
+    <script charset="utf-8" src="../plugins/kindeditor/kindeditor-min.js"></script>
+    <script charset="utf-8" src="../plugins/kindeditor/lang/zh_CN.js"></script>
+    <script src="../plugins/angularjs/angular.min.js"></script>
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/controller/baseController.js"></script>
+    <script src="../js/controller/goodsController.js"></script>
+    <!--service层-->
+    <!--这里直接应用不太好，毕竟只是为了其中的加载下拉列表的方法-->
+    <!--<script src="../js/service/brandService.js"></script> -->
+    <script src="../js/service/goodsService.js"></script>
+    <script src="../js/service/typeTemplateService.js"></script>
+    <script src="../js/service/uploadService.js"></script>
+    <script src="../js/service/itemCatService.js"></script>
+    <!--select2-->
+    <link rel="stylesheet" href="../plugins/select2/select2.css"/>
+    <link rel="stylesheet" href="../plugins/select2/select2-bootstrap.css"/>
+    <script src="../plugins/select2/select2.min.js" type="text/javascript"></script>
+    <!--angularJs和select2整合-->
+    <script src="../js/angular-select2.js"></script>
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="pyg" ng-controller="goodsController"
+      ng-init="findOne();selectItemList();">
+
+<!-- 正文区域 -->
+<section class="content">
+
+    <div class="box-body">
+
+        <!--tab页-->
+        <div class="nav-tabs-custom">
+
+            <!--tab头-->
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#home" data-toggle="tab">商品基本信息</a>
+                </li>
+                <li><a href="#pic_upload" data-toggle="tab">商品图片</a></li>
+                <li><a href="#customAttribute" data-toggle="tab">扩展属性</a></li>
+                <li><a href="#spec" data-toggle="tab">规格</a></li>
+            </ul>
+            <!--tab头/-->
+
+            <!--tab内容-->
+            <div class="tab-content">
+
+                <!--表单内容-->
+                <div class="tab-pane active" id="home">
+                    <div class="row data-type">
+                        <div class="col-md-2 title">商品分类</div>
+
+                        <div class="col-md-10 data">
+                            <table>
+                                <tr>
+                                    <td><select class="form-control" ng-model="entity.goods.category1Id"
+                                                ng-options="item.id as item.name for item in itemList"></select></td>
+                                    <td><select class="form-control select-sm" ng-model="entity.goods.category2Id"
+                                                ng-options="item.id as item.name for item in itemList2"></select></td>
+                                    <td><select class="form-control select-sm" ng-model="entity.goods.category3Id"
+                                                ng-options="item.id as item.name for item in itemList3"></select></td>
+                                    <td>模板ID:{{entity.goods.typeTemplateId}}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-md-2 title">商品名称</div>
+                        <div class="col-md-10 data">
+                            <input type="text" class="form-control" ng-model="entity.goods.goodsName" placeholder="商品名称"
+                                   value="">
+                        </div>
+
+                        <!--这里是一个select2的下拉框 完善下吧-->
+                        <div class="col-md-2 title">品牌</div>
+                        <div class="col-md-10 data">
+                            <!-- <select class="form-control"></select> -->
+                            <!--这里又用到前面发现的那个问题ng-model绑定的是json的id 这里的品牌在数据库里面是id-->
+                            <select  ng-model="entity.goods.brandId"
+                                    ng-options="item.id as item.text for item in brandList" placeholder="选择品牌"
+                                   class="form-control" type="text"/>
+                        </div>
+
+                        <div class="col-md-2 title">副标题</div>
+                        <div class="col-md-10 data">
+                            <input type="text" class="form-control" placeholder="副标题"
+                                   value="" ng-model="entity.goods.caption">
+                        </div>
+
+                        <div class="col-md-2 title">价格</div>
+                        <div class="col-md-10 data">
+                            <div class="input-group">
+                                <span class="input-group-addon">¥</span> <input type="text"
+                                                                                class="form-control" placeholder="价格"
+                                                                                value="" ng-model="entity.goods.price">
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 title editer">商品介绍</div>
+                        <div class="col-md-10 data editer">
+								<textarea name="content"
+                                          style="width: 800px; height: 400px; visibility: hidden;"></textarea>
+                        </div>
+
+                        <div class="col-md-2 title rowHeight2x">包装列表</div>
+                        <div class="col-md-10 data rowHeight2x">
+
+                            <textarea rows="4" class="form-control" placeholder="包装列表"
+                                      ng-model="entity.goodsDesc.packageList"></textarea>
+                        </div>
+
+                        <div class="col-md-2 title rowHeight2x">售后服务</div>
+                        <div class="col-md-10 data rowHeight2x">
+                            <textarea rows="4" class="form-control" placeholder="售后服务"
+                                      ng-model="entity.goodsDesc.saleService"></textarea>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!--图片上传-->
+                <div class="tab-pane" id="pic_upload">
+                    <div class="row data-type">
+                        <table
+                                class="table table-bordered table-striped table-hover dataTable">
+                            <thead>
+                            <tr>
+                                <th class="sorting">颜色</th>
+                                <th class="sorting">图片</th>
+                                <th class="sorting">操作</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="imageItem in entity.goodsDesc.itemImages">
+                                <td>{{imageItem.color}}</td>
+                                <td><img src="{{imageItem.url}}" width="100px" height="100px">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default" title="删除"
+                                            ng-click="deleImageItem($index)">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+                <!--扩展属性-->
+                <div class="tab-pane" id="customAttribute">
+                    <div class="row data-type" ng-repeat="customItem in entity.goodsDesc.customAttributeItems">
+                        <div>
+                            <div class="col-md-2 title">{{customItem.text}}</div>
+                            <div class="col-md-10 data">
+                                <!--双向绑定 这里相当于直接把value设置进去了-->
+                                <input class="form-control" ng-model="customItem.value"
+                                       placeholder="{{customItem.text}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--规格-->
+                <div class="tab-pane" id="spec">
+                    <div class="row data-type">
+                        <div class="col-md-2 title">是否启用规格</div>
+                        <div class="col-md-10 data">
+                            <input type="checkbox" ng-model="entity.goods.isEnableSpec" ng-true-value="1"
+                                   ng-false-value="0">
+                        </div>
+                    </div>
+                    <p>
+
+                    <div>
+                        <div class="row data-type">
+                            <div ng-repeat="spec in specList">
+                                <div class="col-md-2 title">{{spec.text}}</div>
+                                <div class="col-md-10 data">
+					                            <span ng-repeat="specOption in spec.option">
+					                            	<input type="checkbox" ng-checked="checkIsSelect(spec.text,specOption.optionName)"
+                                                           ng-click="updateSpecification($event,spec.text,specOption.optionName);creatItemList();">{{specOption.optionName}}
+					                            </span>
+                                </div>
+                            </div>
+                            {{entity.itemList}}
+                        </div>
+                        <!--SKU列表-->
+                        <div class="row data-type" ng-if="entity.goods.isEnableSpec==1">
+                            <table
+                                    class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                <tr>
+                                    <th class="sorting" ng-repeat="item in entity.goodsDesc.specificationItems">
+                                        {{item.attributeName}}
+                                    </th>
+                                    <th class="sorting">价格</th>
+                                    <th class="sorting">库存</th>
+                                    <th class="sorting">是否启用</th>
+                                    <th class="sorting">是否默认</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="item in entity.itemList">
+                                    <td ng-repeat="spec in entity.goodsDesc.specificationItems">
+                                        {{item.spec[spec.attributeName]}}
+                                    </td>
+                                    <td>
+                                        <input class="form-control" placeholder="价格" ng-model="item.price">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" placeholder="库存数量" ng-model="item.num">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" ng-model="item.status">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" ng-model="item.isDefault">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!--tab内容/-->
+            <!--表单内容/-->
+
+        </div>
+    </div>
+    <div class="btn-toolbar list-toolbar">
+        <a href="goods.html"><button class="btn btn-default">返回列表</button></a>
+    </div>
+
+</section>
+<!-- 正文区域 /-->
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('textarea[name="content"]', {
+            allowFileManager: true
+        });
+    });
+</script>
+</body>
+
+
+</html>

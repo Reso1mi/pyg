@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	">
+    <!-- 加载配置文件 -->
+
+    <!--
+    同个模块中如果出现多个context:property-placeholder ，location properties文件后，
+    运行时出现Could not resolve placeholder 'key' in string value${key}。原因是在加载第一个context:property-placeholder时
+    会扫描所有的bean，而有的bean里面出现第二个 context:property-placeholder引入的properties的占位符${key}，
+    此时还没有加载第二个property-placeholder，所以解析不了${key}。
+    解决办法一，可以将通过模块的多个property-placeholder合并为一个，将初始化放在一起。方法二，添加ignore-unresolvable="true
+    "，这样可以在加载第一个property-placeholder时出现解析不了的占位符进行忽略掉。
+    -->
+    <context:property-placeholder location="classpath*:properties/*.properties" ignore-unresolvable="true"/>
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="maxActive" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <!--jdbc.driver=com.mysql.jdbc.Driver-->
+    <!--jdbc.url=jdbc:mysql://localhost:3306/pinyougoudb?characterEncoding=utf-8-->
+    <!--jdbc.username=root-->
+    <!--jdbc.password=admin-->
+
+    <!-- 让spring管理sqlsessionfactory 使用mybatis和spring整合包中的 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 加载mybatis的全局配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.pyg.mapper"/>
+    </bean>
+</beans>

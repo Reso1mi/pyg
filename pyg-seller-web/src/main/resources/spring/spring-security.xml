@@ -1,0 +1,53 @@
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						 http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http pattern="/*.html" security="none"></http>
+	<http pattern="/css/**" security="none"></http>
+	<http pattern="/img/**" security="none"></http>
+	<http pattern="/js/**" security="none"></http>
+	<http pattern="/plugins/**" security="none"></http>
+	<!--商家入驻功能要开放出来 -->
+	<http pattern="/seller/add.do" security="none"></http>
+
+	<http use-expressions="false">
+		<intercept-url pattern="/**" access="ROLE_SELLER" />
+		<form-login login-page="/shoplogin.html"
+			default-target-url="/admin/index.html"
+			authentication-failure-url="/shoplogin.html"
+			always-use-default-target="true" />
+		<csrf disabled="true" />
+		<headers>
+			<frame-options policy="SAMEORIGIN" />
+		</headers>
+		<logout />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider
+			user-service-ref="userDetailsService">
+			<password-encoder ref="passwordEncoder"></password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+	<!--加密BCryptPasswordEncoder的bean-->
+	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+
+	<beans:bean id="userDetailsService"
+		class="com.pyg.seller.confirmService.UserDetailsServiceImpl">
+		<beans:property name="service" ref="sellerService"></beans:property>
+	</beans:bean>
+	<!--引入dubbo -->
+	<dubbo:application name="pyg-seller-web" />
+	<dubbo:registry
+		address="zookeeper://127.0.0.1:2181" />
+	<!--需要注入的那个属性的接口 -->
+	<dubbo:reference id="sellerService"
+		interface="com.pyg.sellergoods.service.SellerService"/>
+</beans:beans>
