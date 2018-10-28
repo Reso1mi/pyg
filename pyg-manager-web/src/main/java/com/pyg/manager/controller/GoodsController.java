@@ -90,6 +90,10 @@ public class GoodsController {
                     System.out.println("没有查询到item信息");
                 }
             }
+            //静态页生成
+            for(Long goodsId:ids){
+                itemPageService.genItemHtml(goodsId);
+            }
             //审核不通过
             if (status.equals("0")) {
                 itemSearchService.deleteByGoodsIds(Arrays.asList(ids));

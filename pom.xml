@@ -314,5 +314,6 @@
         <module>pyg-search-web</module>
         <module>pyg-page-interface</module>
         <module>pyg-page-service</module>
+        <module>pyg-page-web</module>
     </modules>
 </project>
