@@ -97,16 +97,23 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!--依赖搜索额接口实现数据导入的功能-->
-        <dependency>
+       <!--  <dependency>
             <groupId>com.pyg</groupId>
             <artifactId>pyg-search-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <!--英爱freemark的模块-->
+        </dependency>-->
+        <!--移除搜索接口的依赖解除耦合性-->
+        <!--依赖freemark的模块-->
         <dependency>
             <groupId>com.pyg</groupId>
             <artifactId>pyg-page-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--消息队列-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.13.4</version>
         </dependency>
     </dependencies>
     <build>

@@ -1,11 +1,7 @@
 package com.pyg.manager.controller;
-
-import java.util.Arrays;
 import java.util.List;
-
 import com.pyg.page.service.ItemPageService;
 import com.pyg.pojo.TbItem;
-import com.pyg.search.service.ItemSearchService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +24,8 @@ public class GoodsController {
     @Reference
     private GoodsService goodsService;
 
-    @Reference
-    private ItemSearchService itemSearchService;
+    //@Reference
+    //private ItemSearchService itemSearchService;
 
     @Reference(timeout=40000)
     private ItemPageService itemPageService;
@@ -85,7 +81,7 @@ public class GoodsController {
             if (status.equals("1")) {
                 List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
                 if (itemList.size() > 0) {
-                    itemSearchService.import2Solr(itemList);
+                   // itemSearchService.import2Solr(itemList);
                 } else {
                     System.out.println("没有查询到item信息");
                 }
@@ -96,7 +92,7 @@ public class GoodsController {
             }
             //审核不通过
             if (status.equals("0")) {
-                itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
+                //itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
             }
             return new PygResult(true, "修改成功");
         } catch (Exception e) {
@@ -135,7 +131,7 @@ public class GoodsController {
     public PygResult delete(Long[] ids) {
         try {
             goodsService.delete(ids);
-            itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
+          //  itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
             return new PygResult(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
