@@ -96,6 +96,12 @@
             <artifactId>fastjson</artifactId>
             <version>${fastJson.version}</version>
         </dependency>
+        <!--ActiveMq-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.13.4</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

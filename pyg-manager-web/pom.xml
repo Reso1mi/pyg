@@ -96,19 +96,23 @@
             <artifactId>pyg-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <!--依赖搜索额接口实现数据导入的功能-->
-       <!--  <dependency>
+        <!--  <dependency>
             <groupId>com.pyg</groupId>
             <artifactId>pyg-search-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>-->
-        <!--移除搜索接口的依赖解除耦合性-->
+        <!--移除搜索接口的依赖解除耦合性，利用activemq解决这个问题-->
+
         <!--依赖freemark的模块-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.pyg</groupId>
             <artifactId>pyg-page-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
+        <!--解除耦合性-->
+
         <!--消息队列-->
         <dependency>
             <groupId>org.apache.activemq</groupId>

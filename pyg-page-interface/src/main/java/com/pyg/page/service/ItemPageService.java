@@ -8,4 +8,10 @@ public interface ItemPageService {
      */
     boolean genItemHtml(Long goodsId);
 
+    /**
+     * 删除页面
+     *
+     */
+    boolean deleteItemHtml(Long []goodsIds);
+
 }

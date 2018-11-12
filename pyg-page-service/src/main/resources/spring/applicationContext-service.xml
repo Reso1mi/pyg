@@ -6,10 +6,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
     <context:property-placeholder location="classpath:properties/page.properties" ignore-unresolvable="true"/>
 
-    <dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>
+    <!--完全解耦-->
+    <!-- <dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>
     <dubbo:application name="pyg-page-service"/>
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
-    <dubbo:annotation package="com.pyg.page.service.impl"/>
+    <dubbo:annotation package="com.pyg.page.service.impl"/>-->
 
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>

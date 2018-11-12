@@ -59,10 +59,17 @@ public class SolrUtil {
         solrTemplate.commit();
     }
 
+    private void deleAllSolr(){
+        Query query=new SimpleQuery("*:*");
+        solrTemplate.delete(query);
+        solrTemplate.commit();
+    }
+
     public static void main(String[] args) {
         //classpath* 可以从jar包中找配置文件，不加*只能在当前工程找配置文件
         ApplicationContext context=new ClassPathXmlApplicationContext("classpath*:spring/applicationContext*.xml");
         SolrUtil solrUtil=(SolrUtil)context.getBean("solrUtil");
-        solrUtil.import2Solr();
+        //solrUtil.import2Solr();
+        solrUtil.deleAllSolr();
     }
 }
