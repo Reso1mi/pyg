@@ -293,7 +293,6 @@
 					<artifactId>tomcat7-maven-plugin</artifactId>
 					<version>2.2</version>
 				</plugin>
-
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -315,5 +314,7 @@
         <module>pyg-page-interface</module>
         <module>pyg-page-service</module>
         <module>pyg-page-web</module>
-    </modules>
+		<module>pyg-user-interface</module>
+		<module>pyg-user-service</module>
+	</modules>
 </project>
