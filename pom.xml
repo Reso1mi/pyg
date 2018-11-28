@@ -257,7 +257,6 @@
 				<artifactId>spring-security-config</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 
@@ -315,6 +314,10 @@
         <module>pyg-page-service</module>
         <module>pyg-page-web</module>
 		<module>pyg-user-interface</module>
+		<module>pyg-user-web</module>
 		<module>pyg-user-service</module>
-	</modules>
+        <module>pyg-cart-interface</module>
+        <module>pyg-cart-service</module>
+        <module>pyg-cart-web</module>
+    </modules>
 </project>
